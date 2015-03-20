@@ -17,7 +17,6 @@ SDL_Event Event;
 SDL_Texture *background;
 SDL_Rect rect_background;
 
-
 void loopJuego()
 {
     //Init textures
@@ -39,8 +38,25 @@ void loopJuego()
     int frame=0;
     int animacion_sho = 0;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+
+    int mili_ultima_frame = SDL_GetTicks();
+
+    int fps = 60;
+    int duracion_frame = 1000/fps;
+
     while(true)
     {
+        int duracion_ultima_frame = SDL_GetTicks()-mili_ultima_frame;
+
+        mili_ultima_frame = SDL_GetTicks();
+        cout<<"Frame: "<<frame<<endl;
+        cout<<"Ultima frame: "<<duracion_ultima_frame<<endl;
+        cout<<"Sleep: "<<duracion_frame-duracion_ultima_frame<<endl;
+        cout<<"=============="<<endl;
+
+        if(duracion_frame-duracion_ultima_frame>0)
+            SDL_Delay(duracion_frame-duracion_ultima_frame);
+
         while(SDL_PollEvent(&Event))
         {
             if(Event.type == SDL_QUIT)
@@ -74,6 +90,7 @@ void loopJuego()
 
         SDL_RenderCopy(renderer, background, NULL, &rect_background);
 
+        //for(int i = 0;i<100;i++)
         for(list<Personaje*>::iterator p=personajes.begin();
                 p!=personajes.end();
                 p++)
